@@ -10,6 +10,8 @@ next_button_clicked = False
 correct_choice_detected = False
 flag = True
 
+CAM = 0
+
 #表示した質問を配列に追加していく，因みにチュートリアルは一度のみの表示にするため，あらかじめ追加．
 questions_shown = [0]
 
@@ -256,7 +258,7 @@ def restart_camera(choice_key=None):
     global cap, current_question_index
 
     cap.release()  # カメラを停止
-    cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # カメラを再起動
+    cap = cv2.VideoCapture(CAM, cv2.CAP_DSHOW)  # カメラを再起動
     next_button.config(state=tk.NORMAL)  # 「次の問題」ボタンの状態を有効化（クリック可能）に戻す
 
     if choice_key is not None:
@@ -329,7 +331,7 @@ if __name__ == "__main__":
         exit()
 
     # カメラをキャプチャするためにOpenCVを使用
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(CAM, cv2.CAP_DSHOW)
 
     # ビデオラベルを作成してパック（配置）
     video_label = tk.Label(bottom_frame)
