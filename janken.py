@@ -10,7 +10,7 @@ next_button_clicked = False
 correct_choice_detected = False
 flag = True
 
-CAM = 0
+CAM = 1
 
 #表示した質問を配列に追加していく，因みにチュートリアルは一度のみの表示にするため，あらかじめ追加．
 questions_shown = [0]
@@ -203,7 +203,20 @@ def process_detected_objects(frame, results, threshold=0.91):
 
             # オブジェクトが正解の選択肢に含まれる場合の処理
             for choice_key, choice_value in current_question["choices"].items():
-                if choice_value["is_correct"] and choice_key == name:
+                
+                answer = ''  # もしくは answer = None など初期値を設定する
+            
+
+                # 条件文のブロック内でanswerを代入する処理があると仮定します
+                if choice_key == 'rock':
+                    answer = 'goo'
+                elif choice_key == 'paper':
+                    answer = 'par'
+                elif choice_key == 'scissors':
+                    answer = 'choki'
+
+
+                if  answer== name:
                     # カメラを解放し、検出されたオブジェクトを画像として保存
                     cap.release()
                     cv2.imwrite(f'{choice_key}_detected.jpg', frame)
@@ -217,7 +230,7 @@ def process_detected_objects(frame, results, threshold=0.91):
                     cv2.rectangle(detected_rgb_image, (x1, y1), (x2, y2), bounding_box_color, line_thickness)
 
                     # バウンディングボックスの上部に名前と確信度を追加する．
-                    text = f"{name}: {confidence:.2f}"
+                    text = f"{choice_key}: {confidence:.2f}"
                     font_scale = 0.8  # フォントの大きさ
                     text_thickness = 1  # 文字の太さを変更する
                     text_color = (255,255,0)  # 色の変更
