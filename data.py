@@ -1,6 +1,6 @@
 questions_and_answers = [
     {
-        "question": "チュートリアル[正解：goo]",
+        "question": "(チュートリアル) 選択肢がランダム秒後に表示されます [正解：goo]",
         "choices": {
             "goo": {"answer": "選択肢 A", "is_correct": True},
             "choki": {"answer": "選択肢 B", "is_correct": False},

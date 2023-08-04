@@ -41,8 +41,9 @@ def on_next_button_click():
     next_button.config(state=tk.DISABLED)  # 「次へ」ボタンを無効化（クリック不可）にする
     next_button_clicked = True  # next_button_clicked変数をTrueに設定
 
-    # 次の質問を表示する前に、ランダムな遅延（5秒から15秒）を追加します。
-    root.after(random.randint(5000, 15000), show_next_question)
+    # 次の質問を表示
+    # root.after(random.randint(5000, 15000), show_next_question)   # ランダムな遅延（5秒から15秒）を追加する場合
+    show_next_question()  # ランダムな遅延を追加しない場合
 
     next_button_clicked = False  # next_button_clicked変数をFalseに戻す
 
@@ -73,11 +74,18 @@ def show_next_question():
         questions_shown.append(current_question_index)  # 表示した質問リストに追加
 
         current_question = questions_and_answers[current_question_index]  # 選択した質問を取得
-        update_question_display()  # GUI上の質問表示を更新
+
+        # 選択肢の表示をクリア
+        answer_label.config(text='')
+
+        # GUI上の質問表示を更新
+        update_question_display()
         next_button.config(state=tk.NORMAL)  # 「次へ」ボタンを有効化（クリック可能）にする
 
         # 問題遷移時の結果を表示
         show_result(current_question_index)  # 問題遷移時の結果を表示するための関数を呼び出す
+
+
     else:
         # 全ての質問が表示されている場合
         question_label.config(text='全ての問題が終了しました！')
@@ -94,6 +102,16 @@ def update_question_display():
     """
     question_label.config(text=current_question["question"])  # 現在の質問をGUIのラベルに設定
 
+    # 8秒から15秒のランダムな遅延時間を計算
+    delay_time = random.randint(8000, 15000)
+
+    # 遅延時間後に選択肢を表示するための遅延を追加
+    root.after(delay_time, update_question_display_choices)
+
+def update_question_display_choices():
+    """
+    質問の選択肢を表示する関数。
+    """
     # 選択肢を適切なフォーマットで取得し、GUIのラベルに設定
     choices_text = "\n".join([f"{key} : {value['answer']}" for key, value in current_question["choices"].items()])
     answer_label.config(text=choices_text)
