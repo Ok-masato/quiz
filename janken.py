@@ -95,7 +95,7 @@ def show_next_question():
 
 def update_question_display():
     """
-    GUI上の質問と選択肢を更新する関数。
+    GUI上の質問を更新する関数。
 
     現在の質問を取得し、GUIのラベルに設定します。
     選択肢を適切なフォーマットで取得し、GUIのラベルに設定します。
@@ -115,6 +115,10 @@ def update_question_display_choices():
     # 選択肢を適切なフォーマットで取得し、GUIのラベルに設定
     choices_text = "\n".join([f"{key} : {value['answer']}" for key, value in current_question["choices"].items()])
     answer_label.config(text=choices_text)
+
+     # 質問の選択肢が表示されたタイミングで、update_frame() を呼び出す
+    restart_camera(choice_key)
+    
 
 
 def create_frames(root):
@@ -226,11 +230,14 @@ def process_detected_objects(frame, results, threshold=0.91):
             
 
                 # 条件文のブロック内でanswerを代入する処理があると仮定します
-                if choice_key == 'rock':
+                if choice_value["is_correct"] and choice_key == 'rock':
+                #if choice_key == 'rock':
                     answer = 'goo'
-                elif choice_key == 'paper':
+                elif choice_value["is_correct"] and choice_key == 'paper':   
+                #elif choice_key == 'paper':
                     answer = 'par'
-                elif choice_key == 'scissors':
+                #elif choice_key == 'scissors':
+                elif choice_value["is_correct"] and choice_key == 'scissors':   
                     answer = 'choki'
 
 
@@ -261,7 +268,7 @@ def process_detected_objects(frame, results, threshold=0.91):
                     cv2.imshow(f"Detected '{choice_key}'", detected_rgb_image)
                     cv2.waitKey(0)
                     cv2.destroyAllWindows()
-                    restart_camera(choice_key)
+                    # restart_camera(choice_key)
 
                     # フラグを設定して、正解が検出されたことを示す
                     flag = True
