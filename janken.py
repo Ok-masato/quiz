@@ -126,6 +126,9 @@ def update_question_display_choices():
     #  # 質問の選択肢が表示されたタイミングで、update_frame() を呼び出す
     # restart_camera(choice_key)
     
+    mp3_file_path_A = "question.mp3"  # 正解の音声ファイルのパスをここに入力してください
+    play_mp3(mp3_file_path_A)
+    
     yolo_detection = True
 
     

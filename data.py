@@ -11,8 +11,8 @@ questions_and_answers = [
         "question": "佐賀大学の学生数は約何人か？",
         "choices": {
             "rock": {"answer": "約6000人", "is_correct": True},
-            "scissors": {"answer": "約7000人", "is_correct": False},
-            "paper": {"answer": "約8000人", "is_correct": False}
+            "scissors": {"answer": "約8000人", "is_correct": False},
+            "paper": {"answer": "約10000人", "is_correct": False}
         }
     },
     {
@@ -67,7 +67,7 @@ questions_and_answers = [
         "question": "中山先生，山本，森木の中で300万のスポーツカーに乗っているのは？",
         "choices": {
             "rock": {"answer": "中山先生", "is_correct": False},
-            "scissors": {"answer": "山本君", "is_correct": True},
+            "scissors": {"answer": "山本", "is_correct": True},
             "paper": {"answer": "森木", "is_correct": False}
         }
     },
@@ -113,7 +113,6 @@ questions_and_answers = [
             "scissors": {"answer": "山本", "is_correct": False},
             "paper": {"answer": "森木", "is_correct": False}
         }
-
     },
      {
         "question": "この3コースの中で，コース配属で一番人気のコースは？",
@@ -133,6 +132,7 @@ questions_and_answers = [
         }
 
     },
+
     
     # 他の質問と回答をここに追加
 ]
