@@ -9,6 +9,7 @@ import torch
 next_button_clicked = False
 correct_choice_detected = False
 flag = True
+yolo_detection = False
 
 CAM = 1
 
@@ -93,7 +94,9 @@ def show_next_question():
         questions_shown = []  # 表示された質問リストをリセットして最初からやり直すために空にする
 
 
+   
 def update_question_display():
+    global yolo_detection
     """
     GUI上の質問を更新する関数。
 
@@ -109,6 +112,9 @@ def update_question_display():
     root.after(delay_time, update_question_display_choices)
 
 def update_question_display_choices():
+    
+    # 処理が終わったらstartフラグをTrueにする
+    global yolo_detection
     """
     質問の選択肢を表示する関数。
     """
@@ -116,11 +122,12 @@ def update_question_display_choices():
     choices_text = "\n".join([f"{key} : {value['answer']}" for key, value in current_question["choices"].items()])
     answer_label.config(text=choices_text)
 
-     # 質問の選択肢が表示されたタイミングで、update_frame() を呼び出す
-    restart_camera(choice_key)
+    #  # 質問の選択肢が表示されたタイミングで、update_frame() を呼び出す
+    # restart_camera(choice_key)
     
+    yolo_detection = True
 
-
+    
 def create_frames(root):
     """
     GUIのフレームを作成する関数。
@@ -163,7 +170,7 @@ def update_frame():
     Note:
         この関数は、10ミリ秒後に再度自身を呼び出します（ループ）。
     """
-    global flag, cap, next_button_clicked
+    global flag, cap, next_button_clicked,yolo_detection
 
     ret, frame = cap.read()  # カメラからフレームを読み取る
     if ret:
@@ -174,10 +181,10 @@ def update_frame():
         video_label.imgtk = imgtk  # ラベルにイメージを保持
         video_label.configure(image=imgtk)  # ラベルにイメージを表示
 
-        results = detect_objects(frame)  # オブジェクト検出を実行
-
-        if process_detected_objects(frame, results) and not flag:
-            return
+        if (yolo_detection==True):
+            results = detect_objects(frame)  # オブジェクト検出を実行
+            if process_detected_objects(frame, results) and not flag:
+                return
 
         if next_button_clicked:
             next_button_clicked = False
@@ -217,6 +224,7 @@ def process_detected_objects(frame, results, threshold=0.91):
     objects = results.pandas().xyxy[0]  # 検出されたオブジェクトの情報を取得
 
     for i in range(len(objects)):
+        global yolo_detection
         confidence = objects.confidence[i]
 
         if confidence > threshold:  # 確信度がしきい値以上の検出結果を処理
@@ -243,7 +251,7 @@ def process_detected_objects(frame, results, threshold=0.91):
 
                 if  answer== name:
                     # カメラを解放し、検出されたオブジェクトを画像として保存
-                    cap.release()
+                    #cap.release()
                     cv2.imwrite(f'{choice_key}_detected.jpg', frame)
                     detected_bgr_image = cv2.imread(f'{choice_key}_detected.jpg')
                     detected_rgb_image = cv2.cvtColor(detected_bgr_image, cv2.COLOR_BGR2RGB)
@@ -268,7 +276,8 @@ def process_detected_objects(frame, results, threshold=0.91):
                     cv2.imshow(f"Detected '{choice_key}'", detected_rgb_image)
                     cv2.waitKey(0)
                     cv2.destroyAllWindows()
-                    # restart_camera(choice_key)
+                    yolo_detection =False
+                    #restart_camera(choice_key)
 
                     # フラグを設定して、正解が検出されたことを示す
                     flag = True
