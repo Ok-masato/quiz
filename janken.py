@@ -5,6 +5,7 @@ from data import questions_and_answers
 import random
 import os
 import torch
+import pygame
 
 next_button_clicked = False
 correct_choice_detected = False
@@ -250,6 +251,10 @@ def process_detected_objects(frame, results, threshold=0.91):
 
 
                 if  answer== name:
+
+                    mp3_file_path = "correct.mp3"  # 正解の音声ファイルのパスをここに入力してください
+                    play_mp3(mp3_file_path)
+
                     # カメラを解放し、検出されたオブジェクトを画像として保存
                     #cap.release()
                     cv2.imwrite(f'{choice_key}_detected.jpg', frame)
@@ -288,6 +293,10 @@ def process_detected_objects(frame, results, threshold=0.91):
     correct_choice_detected = False
     return False
 
+def play_mp3(file_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(file_path)
+    pygame.mixer.music.play()
 
 def restart_camera(choice_key=None):
     """
