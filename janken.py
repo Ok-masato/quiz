@@ -13,6 +13,7 @@ flag = True
 yolo_detection = False
 
 CAM = 1
+choice_font_size = 30
 
 #表示した質問を配列に追加していく，因みにチュートリアルは一度のみの表示にするため，あらかじめ追加．
 questions_shown = [0]
@@ -121,7 +122,7 @@ def update_question_display_choices():
     """
     # 選択肢を適切なフォーマットで取得し、GUIのラベルに設定
     choices_text = "\n".join([f"{key} : {value['answer']}" for key, value in current_question["choices"].items()])
-    answer_label.config(text=choices_text)
+    answer_label.config(text=choices_text, font=("Helvetica", choice_font_size))
 
     #  # 質問の選択肢が表示されたタイミングで、update_frame() を呼び出す
     # restart_camera(choice_key)
